@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | ViewProphet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+    <div class="bg-blobs"></div>
+
+    <nav class="sticky top-0 z-50 glass-panel border-b-0 border-x-0 border-t-0 rounded-none px-8 py-5 md:px-12 lg:px-16 transition-all duration-300">
+        <div class="navbar-inner max-w-7xl mx-auto">
+            <div class="nav-logo-section">
+                <a href="index.html" class="logo outfit-font text-2xl font-bold text-gradient flex items-center gap-2"><i class="fab fa-youtube text-red-500"></i> ViewProphet</a>
+            </div>
+            <div class="nav-center-section hidden xl:flex">
+                <a href="index.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Home</a>
+                <a href="prediction.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Predict</a>
+                <a href="dashboard.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Analytics</a>
+                <div class="relative group">
+                    <button class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors flex items-center gap-1">AI Tools <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i></button>
+                    <div class="absolute left-0 mt-2 w-56 rounded-xl glass-panel border border-[var(--glass-border)] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 overflow-hidden z-50">
+                        <div class="py-2 flex flex-col bg-[var(--bg-color)]/90 backdrop-blur-md">
+                            <a href="aitools.html?tool=title" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4 text-center"></i> Title Analyzer</a>
+                            <a href="aitools.html?tool=tags" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4 text-center"></i> Tag Suggestions</a>
+                            <a href="aitools.html?tool=thumbnail" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4 text-center"></i> Thumbnail Score</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="help.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link active font-medium text-[var(--gradient-1)] drop-shadow-md transition-colors">About</a>
+            </div>
+            <div class="nav-right-section">
+                <a href="auth.html" id="nav-login" class="btn-primary px-6 py-2 rounded-full hidden xl:inline-flex">Login</a>
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl hidden xl:block" id="theme-btn" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl xl:hidden" id="mobile-theme-btn" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <button class="text-2xl text-[var(--text-primary)] hover:text-[var(--gradient-1)] transition-colors xl:hidden" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden xl:hidden w-full absolute top-[100%] left-0 glass-panel border-t border-[var(--glass-border)] shadow-2xl max-h-[80vh] overflow-y-auto z-40 origin-top animate__animated animate__fadeInDown animate__faster">
+            <div class="flex flex-col p-4 space-y-2 bg-[var(--bg-color)]/95 backdrop-blur-xl">
+                <a href="index.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Home</a>
+                <a href="prediction.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Predict</a>
+                <a href="dashboard.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Analytics</a>
+                
+                <!-- Mobile AI Tools Expandable -->
+                <div class="mobile-dropdown-group rounded-lg hover:bg-[var(--glass-card-hover)] transition-colors">
+                    <button class="w-full text-left px-4 py-3 font-medium flex justify-between items-center" id="mobile-tools-btn">
+                        AI Tools <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="mobile-tools-chevron"></i>
+                    </button>
+                    <div class="hidden flex-col pl-8 pr-4 py-2 space-y-2 border-l-2 border-[var(--gradient-1)] ml-4 my-1" id="mobile-tools-menu">
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4"></i> Title Analyzer</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4"></i> Tag Suggestions</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4"></i> Thumbnail Score</a>
+                    </div>
+                </div>
+
+                <a href="help.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link active px-4 py-3 rounded-lg font-medium text-[var(--gradient-1)] bg-[var(--gradient-1)]/10">About</a>
+                
+                <div class="pt-4 border-t border-[var(--glass-border)] mt-2">
+                    <a href="auth.html" id="mobile-nav-login" class="btn-primary block text-center px-6 py-3 rounded-xl w-full">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex-grow flex items-center justify-center p-6">
+        <div class="glass-panel w-full max-w-3xl rounded-3xl p-8 md:p-12 relative overflow-hidden animate__animated animate__fadeIn">
+            
+            <div class="absolute -right-20 -top-20 text-9xl text-[var(--gradient-1)] opacity-5 transform rotate-45">
+                <i class="fas fa-rocket"></i>
+            </div>
+            
+            <h2 class="outfit-font text-3xl md:text-4xl font-bold mb-6 flex items-center gap-3">
+                About ViewProphet <i class="fas fa-rocket text-[var(--gradient-1)] animate-bounce" style="animation-duration: 3s"></i>
+            </h2>
+            
+            <p class="text-[var(--text-secondary)] text-lg leading-relaxed mb-10">
+                ViewProphet is a modern AI-powered web application designed to help YouTube creators predict the success of their videos before they even hit the publish button. By analyzing historical data and metadata (like title length, category, and tags), our machine learning model forecasts potential views and assigns a popularity score.
+            </p>
+            
+            <h3 class="outfit-font text-xl font-bold mb-4">Core Architecture & Tech Stack</h3>
+            <div class="flex flex-wrap gap-4 mb-10">
+                <span class="px-4 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--glass-border)] shadow-sm flex items-center gap-2 font-medium">
+                    <i class="fab fa-html5 text-orange-500"></i> HTML5
+                </span>
+                <span class="px-4 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--glass-border)] shadow-sm flex items-center gap-2 font-medium">
+                    <i class="fab fa-css3-alt text-blue-500"></i> Tailwind CSS
+                </span>
+                <span class="px-4 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--glass-border)] shadow-sm flex items-center gap-2 font-medium">
+                    <i class="fab fa-js text-yellow-400"></i> JavaScript ES6+
+                </span>
+                <span class="px-4 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--glass-border)] shadow-sm flex items-center gap-2 font-medium">
+                    <i class="fab fa-python text-blue-400"></i> Python Flask
+                </span>
+                <span class="px-4 py-2 rounded-xl bg-[var(--gradient-full)] text-white shadow-md flex items-center gap-2 font-bold">
+                    <i class="fas fa-brain"></i> Scikit-Learn ML
+                </span>
+                <span class="px-4 py-2 rounded-xl bg-[var(--input-bg)] border border-[var(--glass-border)] shadow-sm flex items-center gap-2 font-medium">
+                    <i class="fas fa-chart-pie text-pink-500"></i> Chart.js
+                </span>
+            </div>
+
+            <div class="rounded-2xl p-6 bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)] text-white shadow-lg mx-auto">
+                <h3 class="outfit-font text-xl font-bold mb-2">Developed With Purpose</h3>
+                <p class="text-white/90">
+                    Built as a demonstration of robust full-stack development, modern AI dashboard aesthetics, premium glassmorphism interfaces, and frictionless machine learning API integration.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-[var(--glass-border)] bg-gradient-to-b from-transparent to-[var(--bg-color)] relative z-10 w-full">
+        <div class="absolute inset-0 bg-[#0f172a] opacity-5 dark:opacity-40 -z-10"></div>
+        <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col items-center justify-center text-center">
+            <h3 class="outfit-font text-xl font-bold mb-3">YouTube Video Popularity Predictor</h3>
+            <p class="text-[var(--text-secondary)] mb-4 font-medium transition-colors hover:text-[var(--gradient-1)] cursor-default">
+                <i class="fas fa-code text-[var(--gradient-2)] mr-1"></i> Created by Giridharan
+            </p>
+            <div class="w-16 h-1 rounded-full bg-[var(--gradient-full)] mb-4"></div>
+            <p class="text-sm text-[var(--text-secondary)] opacity-70">AI & Machine Learning Project</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

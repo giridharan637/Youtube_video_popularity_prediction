@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Video Success | ViewProphet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+    <div class="bg-blobs">
+        <div class="bg-blob-3"></div>
+    </div>
+
+    <nav class="sticky top-0 z-50 glass-panel border-b-0 border-x-0 border-t-0 rounded-none px-8 py-5 md:px-12 lg:px-16 transition-all duration-300">
+        <div class="navbar-inner max-w-7xl mx-auto">
+            <div class="nav-logo-section">
+                <a href="index.html" class="logo outfit-font text-2xl font-bold text-gradient flex items-center gap-2"><i class="fab fa-youtube text-red-500"></i> ViewProphet</a>
+            </div>
+            <div class="nav-center-section hidden xl:flex">
+                <a href="index.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Home</a>
+                <a href="prediction.html" class="nav-link active font-medium text-[var(--gradient-1)] drop-shadow-md">Predict</a>
+                <a href="dashboard.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Analytics</a>
+                <div class="relative group">
+                    <button class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors flex items-center gap-1">AI Tools <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i></button>
+                    <div class="absolute left-0 mt-2 w-56 rounded-xl glass-panel border border-[var(--glass-border)] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 overflow-hidden z-50">
+                        <div class="py-2 flex flex-col bg-[var(--bg-color)]/90 backdrop-blur-md">
+                            <a href="aitools.html?tool=title" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4 text-center"></i> Title Analyzer</a>
+                            <a href="aitools.html?tool=tags" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4 text-center"></i> Tag Suggestions</a>
+                            <a href="aitools.html?tool=thumbnail" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4 text-center"></i> Thumbnail Score</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="help.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">About</a>
+            </div>
+            <div class="nav-right-section">
+                <a href="auth.html" id="nav-login" class="btn-primary px-6 py-2 rounded-full hidden xl:inline-flex">Login</a>
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl hidden xl:block" id="theme-btn" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl xl:hidden" id="mobile-theme-btn" aria-label="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <button class="text-2xl text-[var(--text-primary)] hover:text-[var(--gradient-1)] transition-colors xl:hidden" id="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden xl:hidden w-full absolute top-[100%] left-0 glass-panel border-t border-[var(--glass-border)] shadow-2xl max-h-[80vh] overflow-y-auto z-40 origin-top animate__animated animate__fadeInDown animate__faster">
+            <div class="flex flex-col p-4 space-y-2 bg-[var(--bg-color)]/95 backdrop-blur-xl">
+                <a href="index.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Home</a>
+                <a href="prediction.html" class="nav-link active px-4 py-3 rounded-lg font-medium text-[var(--gradient-1)] bg-[var(--gradient-1)]/10">Predict</a>
+                <a href="dashboard.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Analytics</a>
+                
+                <!-- Mobile AI Tools Expandable -->
+                <div class="mobile-dropdown-group rounded-lg hover:bg-[var(--glass-card-hover)] transition-colors">
+                    <button class="w-full text-left px-4 py-3 font-medium flex justify-between items-center" id="mobile-tools-btn">
+                        AI Tools <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="mobile-tools-chevron"></i>
+                    </button>
+                    <div class="hidden flex-col pl-8 pr-4 py-2 space-y-2 border-l-2 border-[var(--gradient-1)] ml-4 my-1" id="mobile-tools-menu">
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4"></i> Title Analyzer</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4"></i> Tag Suggestions</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4"></i> Thumbnail Score</a>
+                    </div>
+                </div>
+
+                <a href="help.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">About</a>
+                
+                <div class="pt-4 border-t border-[var(--glass-border)] mt-2">
+                    <a href="auth.html" id="mobile-nav-login" class="btn-primary block text-center px-6 py-3 rounded-xl w-full">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="relative max-w-7xl mx-auto px-6 py-12">
+        <!-- Floating Particles Background for Form -->
+        <div class="particles-container">
+            <div class="particle" style="left: 15%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 45%; animation-delay: 4s; animation-duration: 18s;"></div>
+            <div class="particle" style="left: 75%; animation-delay: 6s;"></div>
+        </div>
+
+        <div class="text-center mb-12 animate__animated animate__fadeInDown relative z-10">
+            <h1 class="outfit-font text-4xl md:text-5xl font-bold mb-4">New <span class="hero-gradient-text text-transparent bg-clip-text">Prediction</span></h1>
+            <p class="text-[var(--text-secondary)]">Fill in your video details to unleash the AI analysis.</p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Form Section -->
+            <div class="w-full lg:w-3/5" data-aos="fade-right">
+                <div class="glass-panel p-8 rounded-2xl shadow-xl border border-[var(--glass-border)] relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-[var(--gradient-full)]"></div>
+                    
+                    <form id="prediction-form" class="space-y-6 relative z-10">
+                        <!-- Title Input -->
+                        <div class="space-y-2">
+                            <label class="form-label text-sm flex justify-between items-center">
+                                <span><i class="fas fa-heading w-5 text-center text-[var(--gradient-1)]"></i> Video Title</span>
+                                <span class="text-xs text-[var(--text-secondary)]">Required</span>
+                            </label>
+                            <input type="text" id="title" class="form-control w-full rounded-xl px-4 py-3 shadow-sm focus:ring-2 focus:ring-[var(--gradient-1)] hover:bg-[var(--glass-card-hover)] transition-colors" required placeholder="Enter an engaging title..." oninput="analyzeSEO()">
+                            
+                            <!-- SEO Bar -->
+                            <div class="mt-2 flex items-center gap-3">
+                                <span class="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">SEO Score</span>
+                                <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 w-0 transition-all duration-500 ease-out" id="seo-bar-fill"></div>
+                                </div>
+                                <span id="seo-score-text" class="text-xs font-bold w-10 text-right">0/100</span>
+                            </div>
+                        </div>
+
+                        <!-- YT URL Input -->
+                        <div class="space-y-2">
+                            <label class="form-label text-sm">
+                                <i class="fas fa-list w-5 text-center text-[var(--gradient-2)]"></i> Video Category
+                                <span class="text-xs text-[var(--text-secondary)] ml-auto float-right">Required</span>
+                            </label>
+                            <div class="relative">
+                                <select id="category" class="form-control w-full rounded-xl px-4 py-3 appearance-none shadow-sm cursor-pointer focus:ring-2 focus:ring-[var(--gradient-2)]" required onchange="updateTags()">
+                                    <option value="27" selected>Education</option>
+                                    <option value="20">Gaming</option>
+                                    <option value="10">Music</option>
+                                    <option value="28">Technology</option>
+                                    <option value="24">Entertainment</option>
+                                    <option value="22">Vlog</option>
+                                    <option value="17">Sports</option>
+                                    <option value="25">News</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[var(--text-secondary)]">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- YT URL Input -->
+                        <div class="space-y-2">
+                            <label class="form-label text-sm">
+                                <i class="fas fa-link w-5 text-center text-red-500"></i> YouTube Video URL
+                                <span class="text-xs text-[var(--text-secondary)] ml-auto float-right">Required</span>
+                            </label>
+                            <input type="url" id="yt-url" class="form-control w-full rounded-xl px-4 py-3 shadow-sm focus:ring-2 focus:ring-red-500" required placeholder="https://youtube.com/watch?v=..." oninput="updateThumbnail()">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex flex-col gap-3 mt-8">
+                            <button type="submit" class="btn-primary w-full py-4 text-lg rounded-xl shadow-lg flex items-center justify-center gap-3" id="predict-btn">
+                                <span>Analyze Video Predictability</span>
+                                <i class="fas fa-magic text-xl"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Previews & Tools Section -->
+            <div class="w-full lg:w-2/5 space-y-6" data-aos="fade-left" data-aos-delay="200">
+                
+                <!-- Thumbnail Preview -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h3 class="outfit-font text-lg font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-image text-[var(--gradient-1)]"></i> Thumbnail Preview
+                    </h3>
+                    <div id="thumbnail-box" class="w-full aspect-video rounded-xl bg-[var(--input-bg)] border-2 border-dashed border-[var(--glass-border)] flex items-center justify-center overflow-hidden transition-all duration-300 shadow-inner align-middle relative group">
+                        <i class="fas fa-play-circle text-5xl text-[var(--text-secondary)] opacity-30 transition-all group-hover:scale-110 group-hover:text-[var(--gradient-1)]" id="thumbnail-icon"></i>
+                        <img id="thumbnail-img" class="w-full h-full object-cover hidden" alt="Video Thumbnail">
+                        <!-- Play button overlay when img is present -->
+                        <div id="thumb-overlay" class="absolute inset-0 bg-black/30 hidden items-center justify-center z-10 transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer" onclick="playVideo()" title="Click to play video">
+                            <i class="fab fa-youtube text-red-600 text-6xl drop-shadow-lg bg-white rounded-3xl transition-transform hover:scale-110" style="padding: 2px;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tag Suggestions -->
+                <div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 text-9xl text-[var(--gradient-2)] opacity-5">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="outfit-font text-lg font-semibold mb-2 flex items-center gap-2">
+                        <i class="fas fa-tags text-[var(--gradient-2)]"></i> AI Tag Suggestions
+                    </h3>
+                    <p class="text-xs text-[var(--text-secondary)] mb-4">Dynamically generated based on your category.</p>
+                    <div id="tag-suggestions-container" class="flex flex-wrap gap-2">
+                        <!-- Tags populated via JS -->
+                    </div>
+                </div>
+
+                <!-- Optimization Tips -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <h3 class="outfit-font text-lg font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-[var(--gradient-3)] text-yellow-500"></i> Studio Recommendations
+                    </h3>
+                    <ul class="space-y-3 text-sm text-[var(--text-secondary)]">
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/40 text-green-500 flex flex-shrink-0 items-center justify-center mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                            <span>Maintain title length between <strong>40-60 characters</strong> for optimal CTR and indexing space.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/40 text-green-500 flex flex-shrink-0 items-center justify-center mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                            <span>Load key intent terms in the <strong>first 2 lines</strong> of your description widget.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/40 text-green-500 flex flex-shrink-0 items-center justify-center mt-0.5"><i class="fas fa-check text-xs"></i></div>
+                            <span>Use high-contrast thumbnails; videos with custom thumbs get <strong>154% more clicks</strong>.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Videos Section -->
+    <div class="max-w-7xl mx-auto px-6 py-12 border-t border-[var(--glass-border)] z-10 relative w-full mb-10">
+        <div class="text-center mb-10" data-aos="fade-up">
+            <h2 class="outfit-font text-3xl md:text-4xl font-bold mb-3">Sample Videos for <span class="text-gradient">Testing</span></h2>
+            <p class="text-[var(--text-secondary)]">Click any video card below to load experimental data directly into the prediction engine.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <!-- Video 1 -->
+            <div data-aos="fade-up" data-aos-delay="100" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Amazing Gaming Highlights', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">10:00</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-[var(--gradient-1)] bg-[var(--gradient-1)]/10 px-2 flex items-center h-5 rounded-md border border-[var(--gradient-1)]/20">Gaming</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-[var(--gradient-1)] transition-colors">Amazing Gaming Highlights</h3>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div data-aos="fade-up" data-aos-delay="200" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Viral Music Video Example', 'https://www.youtube.com/watch?v=9bZkp7q19f0')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/9bZkp7q19f0/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">03:35</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Viral Music Video Example</h3>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div data-aos="fade-up" data-aos-delay="300" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Educational Tutorial Example', 'https://www.youtube.com/watch?v=3JZ_D3ELwOQ')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">20:05</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-[var(--gradient-3)] bg-[var(--gradient-3)]/10 px-2 flex items-center h-5 rounded-md border border-[var(--gradient-3)]/20">Education</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-[var(--gradient-3)] transition-colors">Educational Tutorial Example</h3>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div data-aos="fade-up" data-aos-delay="400" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Tech Review Example', 'https://www.youtube.com/watch?v=l482T0yNkeo')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/l482T0yNkeo/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">14:05</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-blue-400 bg-blue-400/10 px-2 flex items-center h-5 rounded-md border border-blue-400/20">Tech</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-blue-400 transition-colors">Tech Review Example</h3>
+                </div>
+            </div>
+
+            <!-- Video 5 -->
+            <div data-aos="fade-up" data-aos-delay="500" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Funny Entertainment Clip', 'https://www.youtube.com/watch?v=V-_O7nl0Ii0')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/V-_O7nl0Ii0/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">01:05</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-orange-400 bg-orange-400/10 px-2 flex items-center h-5 rounded-md border border-orange-400/20">Entertain</span>
+                        <span class="text-[11px] font-bold text-red-400 flex items-center gap-1"><i class="fas fa-snowflake"></i> Low Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-orange-400 transition-colors">Funny Entertainment Clip</h3>
+                </div>
+            </div>
+
+            <!-- Video 6 -->
+            <div data-aos="fade-up" data-aos-delay="100" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Epic Rock Performance Live', 'https://www.youtube.com/watch?v=ktvTqknDobU')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/ktvTqknDobU/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">04:28</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Epic Rock Performance Live</h3>
+                </div>
+            </div>
+
+            <!-- Video 7 -->
+            <div data-aos="fade-up" data-aos-delay="200" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Coding Tutorial for Beginners', 'https://www.youtube.com/watch?v=fLexgOxsZu0')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/fLexgOxsZu0/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">15:00</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-[var(--gradient-3)] bg-[var(--gradient-3)]/10 px-2 flex items-center h-5 rounded-md border border-[var(--gradient-3)]/20">Education</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-[var(--gradient-3)] transition-colors">Coding Tutorial for Beginners</h3>
+                </div>
+            </div>
+
+            <!-- Video 8 -->
+            <div data-aos="fade-up" data-aos-delay="300" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Trending Pop Music Video', 'https://www.youtube.com/watch?v=RgKAFK5djSk')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/RgKAFK5djSk/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">03:51</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Trending Pop Music Video</h3>
+                </div>
+            </div>
+
+            <!-- Video 9 -->
+            <div data-aos="fade-up" data-aos-delay="400" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Guitar Performance Cover', 'https://www.youtube.com/watch?v=JGwWNGJdvx8')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/JGwWNGJdvx8/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">04:13</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Guitar Performance Cover</h3>
+                </div>
+            </div>
+
+            <!-- Video 10 -->
+            <div data-aos="fade-up" data-aos-delay="500" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Global Hit Music Example', 'https://www.youtube.com/watch?v=OPf0YbXqDm0')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/OPf0YbXqDm0/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">03:33</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Global Hit Music Example</h3>
+                </div>
+            </div>
+
+            <!-- Video 11 -->
+            <div data-aos="fade-up" data-aos-delay="100" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Latin Dance Music Example', 'https://www.youtube.com/watch?v=kJQP7kiw5Fk')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/kJQP7kiw5Fk/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">03:48</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-orange-400 bg-orange-400/10 px-2 flex items-center h-5 rounded-md border border-orange-400/20">Entertain.</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-orange-400 transition-colors">Latin Dance Music Example</h3>
+                </div>
+            </div>
+
+            <!-- Video 12 -->
+            <div data-aos="fade-up" data-aos-delay="200" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Acoustic Music Performance', 'https://www.youtube.com/watch?v=2Vv-BfVoq4g')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/2Vv-BfVoq4g/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">04:54</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Acoustic Music Performance</h3>
+                </div>
+            </div>
+
+            <!-- Video 13 -->
+            <div data-aos="fade-up" data-aos-delay="300" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Creative Art Tutorial', 'https://www.youtube.com/watch?v=YqeW9_5kURI')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/YqeW9_5kURI/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">12:00</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-[var(--gradient-3)] bg-[var(--gradient-3)]/10 px-2 flex items-center h-5 rounded-md border border-[var(--gradient-3)]/20">Education</span>
+                        <span class="text-[11px] font-bold text-yellow-500 flex items-center gap-1"><i class="fas fa-bolt"></i> Med Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-[var(--gradient-3)] transition-colors">Creative Art Tutorial</h3>
+                </div>
+            </div>
+
+            <!-- Video 14 -->
+            <div data-aos="fade-up" data-aos-delay="400" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Live Concert Performance', 'https://www.youtube.com/watch?v=uelHwf8o7_U')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/uelHwf8o7_U/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">05:00</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Live Concert Performance</h3>
+                </div>
+            </div>
+
+            <!-- Video 15 -->
+            <div data-aos="fade-up" data-aos-delay="500" class="glass-panel bg-[var(--glass-bg)] rounded-2xl overflow-hidden cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.3)] transition-all duration-300 transform hover:-translate-y-2 group" onclick="loadExample('Pop Music Video Example', 'https://www.youtube.com/watch?v=CevxZvSJLk8')">
+                <div class="relative w-full aspect-video border-b border-[var(--glass-border)]">
+                    <img src="https://img.youtube.com/vi/CevxZvSJLk8/mqdefault.jpg" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center">
+                        <i class="fab fa-youtube text-red-500 text-5xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)] bg-white rounded-2xl" style="padding:1px;"></i>
+                    </div>
+                    <div class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">03:09</div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-semibold text-pink-400 bg-pink-400/10 px-2 flex items-center h-5 rounded-md border border-pink-400/20">Music</span>
+                        <span class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fas fa-fire"></i> High Pop.</span>
+                    </div>
+                    <h3 class="font-bold text-sm line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">Pop Music Video Example</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-[var(--glass-border)] bg-gradient-to-b from-transparent to-[var(--bg-color)] relative z-10 w-full">
+        <div class="absolute inset-0 bg-[#0f172a] opacity-5 dark:opacity-40 -z-10"></div>
+        <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col items-center justify-center text-center">
+            <h3 class="outfit-font text-xl font-bold mb-3">YouTube Video Popularity Predictor</h3>
+            <p class="text-[var(--text-secondary)] mb-4 font-medium transition-colors hover:text-[var(--gradient-1)] cursor-default">
+                <i class="fas fa-code text-[var(--gradient-2)] mr-1"></i> Created by Giridharan
+            </p>
+            <div class="w-16 h-1 rounded-full bg-[var(--gradient-full)] mb-4"></div>
+            <p class="text-sm text-[var(--text-secondary)] opacity-70">AI & Machine Learning Project</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        function updateThumbnail() {
+            const url = document.getElementById('yt-url').value;
+            const img = document.getElementById('thumbnail-img');
+            const icon = document.getElementById('thumbnail-icon');
+            const overlay = document.getElementById('thumb-overlay');
+            
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            
+            if (match && match[2].length === 11) {
+                const vidId = match[2];
+                img.src = `https://img.youtube.com/vi/${vidId}/maxresdefault.jpg`;
+                img.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                icon.classList.add('hidden');
+                // Store the video ID on the box for later use
+                document.getElementById('thumbnail-box').dataset.videoId = vidId;
+            } else {
+                img.classList.add('hidden');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+                icon.classList.remove('hidden');
+                document.getElementById('thumbnail-box').dataset.videoId = '';
+            }
+        }
+
+        function playVideo() {
+            const box = document.getElementById('thumbnail-box');
+            const videoId = box.dataset.videoId;
+            if (!videoId) return;
+
+            // Build YouTube embed URL with autoplay
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+            // Replace the entire box content with an iframe, add fade-in animation
+            box.innerHTML = `
+                <iframe
+                    src="${embedUrl}"
+                    class="w-full h-full animate__animated animate__fadeIn"
+                    style="border:none; border-radius: 0.75rem;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title="YouTube Video Player"
+                ></iframe>
+            `;
+            // Remove border so the iframe looks flush
+            box.classList.remove('border-dashed', 'border-2');
+        }
+
+        function analyzeSEO() {
+            const title = document.getElementById('title').value;
+            const bar = document.getElementById('seo-bar-fill');
+            const txt = document.getElementById('seo-score-text');
+            
+            let score = 0;
+            if(title.length > 0) score += 20;
+            if(title.length >= 40 && title.length <= 60) score += 40;
+            else if(title.length > 60) score += 25;
+            
+            const buzzwords = ['how', 'to', 'top', 'best', 'review', 'vlog', 'tutorial', '2023', '2024', 'why', 'guide', 'explained'];
+            if(buzzwords.some(word => title.toLowerCase().includes(word))) score += 40;
+            
+            // cap at 100
+            score = Math.min(100, score);
+            
+            bar.style.width = score + '%';
+            txt.innerText = score + '/100';
+            
+            if(score < 40) bar.style.backgroundColor = '#ef4444'; // Red
+            else if(score < 80) bar.style.backgroundColor = '#eab308'; // Yellow
+            else bar.style.backgroundColor = '#22c55e'; // Green
+        }
+
+        function updateTags() {
+            const cat = document.getElementById('category').value;
+            const container = document.getElementById('tag-suggestions-container');
+            const tagsMap = {
+                '27': ['#Education', '#Tutorial', '#Learn', '#HowTo', '#Science', '#Study', '#Tips', '#Masterclass'],
+                '10': ['#Music', '#NewMusic', '#Cover', '#LivePerformance', '#Artist', '#MusicVideo', '#Trending'],
+                '20': ['#Gaming', '#Gameplay', '#LetPlay', '#Stream', '#Esports', '#Gamer', '#Twitch', '#Walkthrough'],
+                '28': ['#Tech', '#Review', '#Unboxing', '#Gadgets', '#Technology', '#Setup', '#Apple', '#Android'],
+                '24': ['#Entertainment', '#Funny', '#Comedy', '#Vlog', '#Trending', '#Drama', '#Reaction', '#StoryTime'],
+                '22': ['#Vlog', '#Daily', '#Life', '#Travel', '#Personal', '#Blogger', '#Story', '#Moments'],
+                '17': ['#Sports', '#Athletics', '#Match', '#Highlights', '#Fitness', '#Training', '#Competition', '#Team'],
+                '25': ['#News', '#Politics', '#CurrentEvents', '#Journalism', '#Update', '#Report', '#World', '#Breaking']
+            };
+            
+            container.innerHTML = '';
+            const tags = tagsMap[cat] || tagsMap['27'];
+            tags.forEach((tag, index) => {
+                const span = document.createElement('span');
+                span.className = 'px-3 py-1.5 rounded-full text-xs font-semibold bg-[var(--gradient-full)] text-white shadow-md cursor-pointer transition-transform hover:scale-110 hover:shadow-lg inline-block animate__animated animate__zoomIn';
+                span.style.animationDelay = `${index * 50}ms`;
+                span.innerText = tag;
+                container.appendChild(span);
+            });
+        }
+        
+        function fillExampleData() {
+            loadExample("Amazing Gaming Highlights 2026", "20", "https://youtube.com/watch?v=dQw4w9WgXcQ", "600", "12", "800", "18:00");
+        }
+
+        function loadExample(title, url) {
+            const data = {
+                'title': title,
+                'yt-url': url
+            };
+
+            for (const [id, value] of Object.entries(data)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.value = value;
+                    
+                    // Add highlight animation
+                    el.classList.add('ring-2', 'ring-[var(--gradient-2)]', 'bg-[var(--glass-card-hover)]');
+                    setTimeout(() => {
+                        el.classList.remove('ring-2', 'ring-[var(--gradient-2)]', 'bg-[var(--glass-card-hover)]');
+                    }, 500);
+                }
+            }
+            
+            // Trigger dependent UI updates
+            updateTags();
+            analyzeSEO();
+            updateThumbnail();
+            
+            // Add a subtle shake to the form to indicate it was filled
+            const form = document.getElementById('prediction-form');
+            form.classList.add('animate__animated', 'animate__pulse');
+            setTimeout(() => {
+                form.classList.remove('animate__animated', 'animate__pulse');
+            }, 1000);
+
+            // Scroll up smoothly to see changes
+            window.scrollTo({
+                top: document.getElementById('prediction-form').getBoundingClientRect().top + window.scrollY - 120,
+                behavior: 'smooth'
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTags();
+            // Start listening on title
+            document.getElementById('title').addEventListener('keyup', analyzeSEO);
+        });
+    </script>
+</body>
+</html>

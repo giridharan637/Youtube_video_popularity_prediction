@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Popularity Predictor | AI Analytics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles (Tailwind directives processed via style.css normally, but here we inject custom classes via head if not using build step. Assuming style.css works with tailwind base in our custom setup via CSS compilation, but since we are using CDN, we load it after) -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="antialiased">
+    <!-- Animated Background Blobs -->
+    <div class="bg-blobs">
+        <div class="bg-blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel border-b-0 border-x-0 border-t-0 rounded-none px-8 py-5 md:px-12 lg:px-16 transition-all duration-300">
+        <div class="navbar-inner max-w-7xl mx-auto">
+            <!-- LEFT: Logo -->
+            <div class="nav-logo-section">
+                <a href="index.html" class="logo outfit-font text-2xl font-bold text-gradient flex items-center gap-2">
+                    <i class="fab fa-youtube text-red-500"></i> ViewProphet
+                </a>
+            </div>
+
+            <!-- CENTER: Desktop Menu -->
+            <div class="nav-center-section hidden xl:flex">
+                <a href="index.html" class="nav-link active font-medium text-[var(--gradient-1)] hover:text-[var(--gradient-2)] transition-colors">Home</a>
+                <a href="prediction.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Predict</a>
+                <a href="dashboard.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Analytics</a>
+                
+                <!-- AI Tools Dropdown -->
+                <div class="relative group">
+                    <button class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors flex items-center gap-1">
+                        AI Tools <i class="fas fa-chevron-down text-xs transition-transform group-hover:rotate-180"></i>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-56 rounded-xl glass-panel border border-[var(--glass-border)] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top translate-y-2 group-hover:translate-y-0 overflow-hidden z-50">
+                        <div class="py-2 flex flex-col bg-[var(--bg-color)]/90 backdrop-blur-md">
+                            <a href="aitools.html?tool=title" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4 text-center"></i> Title Analyzer</a>
+                            <a href="aitools.html?tool=tags" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4 text-center"></i> Tag Suggestions</a>
+                            <a href="aitools.html?tool=thumbnail" class="px-4 py-2.5 text-sm hover:bg-[var(--glass-card-hover)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4 text-center"></i> Thumbnail Score</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="help.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link font-medium hover:text-[var(--gradient-1)] transition-colors">About</a>
+            </div>
+
+            <!-- RIGHT: Actions + Mobile Toggle -->
+            <div class="nav-right-section">
+                <!-- Desktop Actions -->
+                <a href="auth.html" id="nav-login" class="btn-primary px-6 py-2 rounded-full hidden xl:inline-flex">Login</a>
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl hidden xl:block" id="theme-btn" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <!-- Mobile Toggles -->
+                <button class="theme-toggle hover:text-[var(--gradient-1)] transition-colors text-xl xl:hidden" id="mobile-theme-btn" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="text-2xl text-[var(--text-primary)] hover:text-[var(--gradient-1)] transition-colors xl:hidden" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden xl:hidden w-full absolute top-[100%] left-0 glass-panel border-t border-[var(--glass-border)] shadow-2xl max-h-[80vh] overflow-y-auto z-40 origin-top animate__animated animate__fadeInDown animate__faster">
+            <div class="flex flex-col p-4 space-y-2 bg-[var(--bg-color)]/95 backdrop-blur-xl">
+                <a href="index.html" class="nav-link active px-4 py-3 rounded-lg font-medium text-[var(--gradient-1)] bg-[var(--gradient-1)]/10">Home</a>
+                <a href="prediction.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Predict</a>
+                <a href="dashboard.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Dashboard</a>
+                <a href="history.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">History</a>
+                <a href="analytics.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Analytics</a>
+                
+                <!-- Mobile AI Tools Expandable -->
+                <div class="mobile-dropdown-group rounded-lg hover:bg-[var(--glass-card-hover)] transition-colors">
+                    <button class="w-full text-left px-4 py-3 font-medium flex justify-between items-center" id="mobile-tools-btn">
+                        AI Tools <i class="fas fa-chevron-down text-xs transition-transform duration-300" id="mobile-tools-chevron"></i>
+                    </button>
+                    <div class="hidden flex-col pl-8 pr-4 py-2 space-y-2 border-l-2 border-[var(--gradient-1)] ml-4 my-1" id="mobile-tools-menu">
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-heading w-4"></i> Title Analyzer</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-tags w-4"></i> Tag Suggestions</a>
+                        <a href="#" class="py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--gradient-1)] transition-colors flex items-center gap-2"><i class="fas fa-image w-4"></i> Thumbnail Score</a>
+                    </div>
+                </div>
+
+                <a href="help.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">Help / Guide</a>
+                <a href="about.html" class="nav-link px-4 py-3 rounded-lg font-medium hover:bg-[var(--glass-card-hover)] transition-colors">About</a>
+                
+                <div class="pt-4 border-t border-[var(--glass-border)] mt-2">
+                    <a href="auth.html" id="mobile-nav-login" class="btn-primary block text-center px-6 py-3 rounded-xl w-full">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        <div class="max-w-4xl mx-auto z-10 animate__animated animate__fadeInUp">
+            <h1 class="outfit-font text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+                Predict Your <span class="text-gradient">YouTube Video's</span> Success
+            </h1>
+            <p class="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
+                Leverage advanced machine learning algorithms to forecast views, analyze trends, and optimize your videos before hitting publish.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="prediction.html" class="btn-primary px-8 py-4 rounded-full text-lg w-full sm:w-auto shadow-lg hover:shadow-xl flex items-center gap-3">
+                    Start Prediction <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#features" class="px-8 py-4 rounded-full text-lg font-medium border-2 border-[var(--glass-border)] bg-[var(--glass-bg)] hover:bg-[var(--glass-card-hover)] transition-all w-full sm:w-auto shadow-sm backdrop-blur-md">
+                    Explore Features
+                </a>
+            </div>
+        </div>
+        
+        <!-- Dashboard Mockup Preview -->
+        <div class="mt-16 w-full max-w-5xl px-4 animate__animated animate__fadeInUp animate__delay-1s" data-aos="fade-up">
+            <div class="glass-panel rounded-2xl p-2 shadow-2xl relative">
+                <!-- Mac window dots -->
+                <div class="absolute top-4 left-4 flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div class="pt-8 px-4 pb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="col-span-1 md:col-span-2 bg-[var(--input-bg)] rounded-xl h-48 border border-[var(--glass-border)] flex items-center justify-center p-6">
+                            <!-- Mock Chart representation -->
+                            <div class="w-full h-full flex items-end gap-2 justify-between">
+                                <div class="w-1/6 bg-[var(--gradient-1)] rounded-t-md h-[40%]"></div>
+                                <div class="w-1/6 bg-[var(--gradient-1)] rounded-t-md h-[70%]"></div>
+                                <div class="w-1/6 bg-[var(--gradient-1)] rounded-t-md h-[50%]"></div>
+                                <div class="w-1/6 bg-[var(--gradient-2)] rounded-t-md h-[90%]"></div>
+                                <div class="w-1/6 bg-[var(--gradient-1)] rounded-t-md h-[60%]"></div>
+                            </div>
+                        </div>
+                        <div class="col-span-1 border border-[var(--glass-border)] bg-[var(--input-bg)] rounded-xl h-48 flex flex-col items-center justify-center space-y-2">
+                            <h3 class="outfit-font text-4xl font-bold text-gradient">92%</h3>
+                            <p class="text-sm text-[var(--text-secondary)]">Popularity Score</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="outfit-font text-4xl md:text-5xl font-bold mb-4">Why Use <span class="text-gradient">ViewProphet?</span></h2>
+                <p class="text-[var(--text-secondary)] max-w-2xl mx-auto text-lg">Our platform gives you the data-driven edge you need to stand out.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-2xl text-[var(--gradient-1)]"></i>
+                    </div>
+                    <h3 class="outfit-font text-2xl font-semibold mb-3">AI-Powered Accuracy</h3>
+                    <p class="text-[var(--text-secondary)] leading-relaxed">Our Random Forest model analyzes hundreds of data points to accurately predict engagement and popularity before you publish.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-pie text-2xl text-[var(--gradient-2)]"></i>
+                    </div>
+                    <h3 class="outfit-font text-2xl font-semibold mb-3">Interactive Analytics</h3>
+                    <p class="text-[var(--text-secondary)] leading-relaxed">Visualize trends, like-to-view ratios, and category performance with beautiful, responsive generated charts.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel glass-panel-hover rounded-2xl p-8" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mb-6">
+                        <i class="fas fa-lightbulb text-2xl text-[var(--gradient-3)]"></i>
+                    </div>
+                    <h3 class="outfit-font text-2xl font-semibold mb-3">Smart Suggestions</h3>
+                    <p class="text-[var(--text-secondary)] leading-relaxed">Get data-driven recommendations for SEO optimizations, smart tags, and the absolute best time to upload your content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Preview Section mock -->
+    <section class="py-16 px-6 relative z-10 border-t border-[var(--glass-border)]">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="outfit-font text-3xl font-bold mb-10">Trusted by modern creators building the future</h2>
+            <div class="flex justify-center gap-8 text-[var(--text-secondary)] opacity-50 flex-wrap">
+                <i class="fab fa-aws text-5xl"></i>
+                <i class="fab fa-js text-5xl"></i>
+                <i class="fab fa-python text-5xl"></i>
+                <i class="fab fa-youtube text-5xl"></i>
+                <i class="fas fa-database text-5xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-20 border-t border-[var(--glass-border)] bg-gradient-to-b from-transparent to-[var(--bg-color)] relative z-10">
+        <div class="absolute inset-0 bg-[#0f172a] opacity-5 dark:opacity-40 -z-10"></div>
+        <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col items-center justify-center text-center">
+            <h3 class="outfit-font text-xl font-bold mb-3">YouTube Video Popularity Predictor</h3>
+            <p class="text-[var(--text-secondary)] mb-4 font-medium transition-colors hover:text-[var(--gradient-1)] cursor-default">
+                <i class="fas fa-code text-[var(--gradient-2)] mr-1"></i> Created by Giridharan
+            </p>
+            <div class="w-16 h-1 rounded-full bg-[var(--gradient-full)] mb-4"></div>
+            <p class="text-sm text-[var(--text-secondary)] opacity-70">AI & Machine Learning Project</p>
+        </div>
+    </footer>
+
+    <!-- AOS Script JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
